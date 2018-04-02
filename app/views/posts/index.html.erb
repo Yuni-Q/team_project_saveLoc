@@ -1,0 +1,45 @@
+<h2>Listing posts</h2>
+<table class="table">
+  <thead>
+      <th style="text-align: center;">No.</th>
+      <th>Title</th>
+      <th>Created by</th>
+    </tr>
+ 
+  <tbody>
+    <% @notices.each do |notice| %>
+      <tr>
+        <td style="color: red"  class="col-md-1 col-xs-1" align="center">
+          공지사항
+        </td>
+        <td class="col-md-8 col-xs-6"><%= link_to notice.title, "/notices/show/#{notice.id}" %></td>
+        <td>
+          <% if notice.created_at %>
+            <%= time_ago_in_words(notice.created_at) %> ago
+          <% else %>
+            "n/a"
+          <% end %>
+        </td>
+
+      </tr>
+    <% end %>
+    <% @posts.each do |post| %>
+      <tr>
+        <td class="col-md-1 col-xs-1" align="center">
+          <%= post.id %>
+        </td>
+        <td class="col-md-8 col-xs-6"><%= link_to post.title, post %></td>
+        <td><%= post.user.present? ? post.user.email : "n/a" %>, <%= time_ago_in_words(post.created_at) %> ago</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div align="center">
+  <%= paginate @posts %>
+</div>
+<div align="right" style="margin-bottom: 80px;">
+  <% if user_roles(current_user) == "Admin" %>
+  <%= link_to '공지사항', '/notices/new', class: "btn btn-default" %>
+  <% end %>  
+  <%= link_to 'New Post', new_post_path, class: "btn btn-default" %>  
+</div>
